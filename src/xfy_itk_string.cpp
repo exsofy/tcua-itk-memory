@@ -1,8 +1,10 @@
 #include <string.h>
+#include <memory.h>
 
 #include <base_utils/mem.h>
+#include <tc/preferences.h>
 
-#include "../xfy_trace/xfy_trace_itk.h"
+#include "../trace/xfy_trace_itk.h"
 #include "xfy_itk_string.h"
 
 
@@ -10,7 +12,7 @@ char * XFY_ITK_string_copy( const char* orig )
 {
   if ( orig == NULL ) return NULL;
   size_t iLen = ( strlen ( orig ) + 1 ) * sizeof ( char );
-  return (char*)memcpy ( MEM_alloc ( (int)iLen ), orig, iLen );  
+  return (char*)memcpy ( MEM_alloc ( (int)iLen ), orig, iLen );
 }
 
 char * XFY_ITK_string_ncopy( const char* orig, unsigned int count )
@@ -20,7 +22,7 @@ char * XFY_ITK_string_ncopy( const char* orig, unsigned int count )
   if ( iLen > count ) iLen = count;
   char *pszResult = (char*)memcpy ( MEM_alloc ( (int)( ( iLen + 1 ) * sizeof ( char ) ) ),
                                     orig,
-                                    iLen  * sizeof ( char ) );  
+                                    iLen  * sizeof ( char ) );
   pszResult[iLen] = 0; // terminate string
   return pszResult;
 }
@@ -56,19 +58,20 @@ void XFY_ITK_string_nappend( char* &orig, const char *append, unsigned int count
 
 XFYITKString& XFYITKString::getPreference ( const char *preference )
 {
-  XFY_TRACE_FCE( XFYITKString::getPreference );
-  XFY_TRACE_PARAM_1 ( preference, I );
+  XFY_TFCE_NAME( XFYITKString::getPreference );
+  XFY_TPAR_1( preference, I );
 
   this->operator =(NULL); // reset the value
 
-  XFY_CALL/*_EX*/( PREF_ask_char_value(preference, 0, &(*this)) );
+  XFY_TCALL_V( PREF_ask_char_value(preference, 0, &(*this)), *this );
 
   return *this;
 };
 
 XFYITKString& XFYITKString::encodeXML ()
 {
-  XFY_TRACE_FCE( XFYITKString::encodeXML );
+  XFY_TFCE_NAME( XFYITKString::encodeXML );
+  XFY_TPAR_0();
 
   char *pszEncoded = XFY_ITK_string_xml_encode ( (const char*)this->m_pszValue );
 
@@ -95,7 +98,7 @@ char * XFY_ITK_string_xml_encode ( const char* orig )
       case '>' : newLen += 4; break;
       case '\'' : newLen += 6; break;
       case '"' : newLen += 6; break;
-      default : newLen++;
+      default : newLen++; break;
     }
   }
   
@@ -123,7 +126,7 @@ char * XFY_ITK_string_xml_encode ( const char* orig )
         case '>'  : memcpy ( pszResRun, "&gt;", 4 );   pszResRun += 4; break;
         case '\'' : memcpy ( pszResRun, "&apos;", 6 ); pszResRun += 6; break;
         case '"'  : memcpy ( pszResRun, "&quot;", 6 ); pszResRun += 6; break;
-        default   : *pszResRun = *pszRun;              pszResRun++;
+        default   : *pszResRun = *pszRun;              pszResRun++; break;
       }
       pszRun++;
     }
@@ -131,7 +134,7 @@ char * XFY_ITK_string_xml_encode ( const char* orig )
     *pszResRun = 0; // EOS
   }
 
-  XFY_TRACE_MSG ( "XML Encode %s to %s (%d)\n", orig, pszResult, newLen );
+  XFY_TMSG ( "XML Encode %s to %s (%d)\n", orig, pszResult, newLen );
 
   return pszResult;
 }

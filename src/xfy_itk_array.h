@@ -1,6 +1,7 @@
-#ifndef _XFY_ITK_ARRAY_H_INCLUDED_
-#define _XFY_ITK_ARRAY_H_INCLUDED_
+#ifndef XFY_ITK_ARRAY_H
+#define XFY_ITK_ARRAY_H
 
+#include <string.h>
 #include "xfy_itk_string.h"
 
 template < class T > class XFYITKArray
@@ -140,8 +141,8 @@ typedef XFYITKArray<WSO_status_t> XFYITKWSOStatusArray;
 typedef XFYITKArray<AE_reference_type_t> XFYITKAEReferenceTypeArray;
 #endif
 
-/* borrow the old function untill a MEM_length is not available */
-int SM_length( const void * );
+/* borrow the old function until a MEM_length is not available */
+extern "C" int SM_length( const void * );
 
 class XFYITKStringArray : public XFYITKArray<char *>
 {
@@ -172,13 +173,17 @@ protected:
   { 
     if (pArray)
     {
-      long lSize = SM_length ( pArray );
+/*
+ * Not supported any more, there might be problems with <F> by arrays
+ *       long lSize = SM_length ( pArray );
+ */
 
       for ( int iPos = iIndex; // from index
 	      ( iPos < iIndex + iSize ) && ( iPos < iCount ); // until size or count reached
 	      iPos++ )
       { // free the memory attached to the element
-  		  if ( ( pArray[iPos] != NULL ) && !( ( (void *)(pArray[iPos]) > pArray ) && ( (void *)(pArray[iPos]) < pArray + lSize ) ) ) 
+  		  if ( ( pArray[iPos] != NULL ) && !( ( (void *)(pArray[iPos]) > pArray )
+  			/* && ( (void *)(pArray[iPos]) < pArray + lSize )*/ ) )
         { // not null and not inside of the array
 	        MEM_free ( pArray[iPos] );
         }
@@ -199,4 +204,4 @@ protected:
 
 
 
-#endif /* _XFY_ARRAY_ITK_H_INCLUDED_ */
+#endif /* XFY_ARRAY_ITK_H */

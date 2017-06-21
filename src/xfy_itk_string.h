@@ -1,8 +1,5 @@
-#ifndef __XFY_ITK_STRING_H_
-#define __XFY_ITK_STRING_H_
-
-#include <tc/preferences.h>
-
+#ifndef XFY_ITK_STRING_H
+#define XFY_ITK_STRING_H
 
 // copy a string into a new (persistent) memory
 char * XFY_ITK_string_copy( const char* orig );
@@ -83,4 +80,4 @@ public:
 };
 
 
-#endif /* __XFY_ITK_STRING_H_ */
+#endif /* XFY_ITK_STRING_H */
