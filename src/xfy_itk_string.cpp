@@ -7,6 +7,7 @@
 #include "../trace/xfy_trace_itk.h"
 #include "xfy_itk_string.h"
 
+namespace XFY {
 
 char * XFY_ITK_string_copy( const char* orig )
 {
@@ -56,9 +57,9 @@ void XFY_ITK_string_nappend( char* &orig, const char *append, unsigned int count
 }
 
 
-XFYITKString& XFYITKString::getPreference ( const char *preference )
+ITKString& ITKString::getPreference ( const char *preference )
 {
-  XFY_TFCE_NAME( XFYITKString::getPreference );
+  XFY_TFCE_NAME( ITKString::getPreference );
   XFY_TPAR_1( preference, I );
 
   this->operator =(NULL); // reset the value
@@ -68,9 +69,9 @@ XFYITKString& XFYITKString::getPreference ( const char *preference )
   return *this;
 };
 
-XFYITKString& XFYITKString::encodeXML ()
+ITKString& ITKString::encodeXML ()
 {
-  XFY_TFCE_NAME( XFYITKString::encodeXML );
+  XFY_TFCE_NAME( ITKString::encodeXML );
   XFY_TPAR_0();
 
   char *pszEncoded = XFY_ITK_string_xml_encode ( (const char*)this->m_pszValue );
@@ -137,4 +138,6 @@ char * XFY_ITK_string_xml_encode ( const char* orig )
   XFY_TMSG ( "XML Encode %s to %s (%d)\n", orig, pszResult, newLen );
 
   return pszResult;
+}
+
 }

@@ -1,10 +1,12 @@
-#ifndef XFY_ITK_ARRAY_H
-#define XFY_ITK_ARRAY_H
+#ifndef XFY_ITK_ARRAY_H_
+#define XFY_ITK_ARRAY_H_
 
 #include <string.h>
 #include "xfy_itk_string.h"
 
-template < class T > class XFYITKArray
+namespace XFY {
+
+template < class T > class ITKArray
 {
 protected:
   T* pArray;
@@ -13,24 +15,23 @@ protected:
   void* pCapacityReference; // pointer for which is the capacity valid
   int iGrowBy;              // capacity increment
 public:
-  XFYITKArray( const T* pa, const int pc) { pCapacityReference = pArray = NULL; iCapacity = 0; iGrowBy = 32; iCount = 0; Add ( pa, pc ); }
-  XFYITKArray() { pCapacityReference = pArray = NULL; iCount = 0; iCapacity = 0; iGrowBy = 32; }
-  XFYITKArray( int Size, int Grow = 32 ) { pCapacityReference = pArray = ( ( Size > 0 ) ? (T*)MEM_alloc ( sizeof ( T ) * Size ) : NULL ); iCount = Size; iCapacity = Size; iGrowBy = Grow; }
+  ITKArray( const T* pa, const int pc) { pCapacityReference = pArray = NULL; iCapacity = 0; iGrowBy = 32; iCount = 0; Add ( pa, pc ); }
+  ITKArray() { pCapacityReference = pArray = NULL; iCount = 0; iCapacity = 0; iGrowBy = 32; }
+  ITKArray( int Size, int Grow = 32 ) { pCapacityReference = pArray = ( ( Size > 0 ) ? (T*)MEM_alloc ( sizeof ( T ) * Size ) : NULL ); iCount = Size; iCapacity = Size; iGrowBy = Grow; }
 //  ITKArray( const ITKArray<T> &source ) : ITKArray() { Add ( &source, source.iCount ); } // SCO add
-  ~XFYITKArray() { if (pArray) MEM_free(pArray); pArray = NULL; };
+  ~ITKArray() { if (pArray) MEM_free(pArray); pArray = NULL; };
 
   T** operator &() { return &pArray; };
   operator T*() const { return pArray; };
   T &operator [](const int iIndex)  const { return pArray[iIndex]; };
 
-  int *PtrSize() { return &iCount; };
+  int *sizePtr() { return &iCount; };
 
-  const int GetSize() const { return iCount; };
-  const int GetUpperBound() const { return iCount - 1; };
+  const int size() const { return iCount; };
 
-  const T* GetData() const { return pArray; }
+  const T* data() const { return pArray; }
 
-  void SetSize ( int nNewSize, int nGrowBy = -1 )
+  void resize ( int nNewSize, int nGrowBy = -1 )
   {
     if ( nGrowBy > 0 ) iGrowBy = nGrowBy;
     if ( ( nNewSize > iCapacity ) || ( pCapacityReference != pArray ) )
@@ -41,7 +42,7 @@ public:
   }
 
   /* Add new element to the array */
-  int Add( const T &newElement)
+  int push_back( const T &newElement)
   {
     if ( ( iCount >= iCapacity ) || ( pCapacityReference != pArray ) )
     {
@@ -53,7 +54,7 @@ public:
   }
   
   /* Add iLen new elements to the array */
-  int Add( const T *newElement, const int iLen )
+  int insert( const T *newElement, const int iLen )
   {
     if ( ( iCount + iLen >= iCapacity ) || ( pCapacityReference != pArray ) )
     {
@@ -68,7 +69,7 @@ public:
   }
 
   /* Add iLen copies of the element */
-  int Add( const T newElement, const int iLen )
+  int insert( const T newElement, const int iLen )
   {
     if ( ( iCount + iLen >= iCapacity ) || ( pCapacityReference != pArray ) )
     {
@@ -84,17 +85,17 @@ public:
     return iCount;
   }
 
-  void RemoveAt( const int iIndex, const int iSize = 1 )
+  void erase( const int iIndex, const int iSize = 1 )
     { if ( iCount - ( iIndex + iSize ) > 0 )
         memmove ( (unsigned char *)pArray + iIndex * sizeof ( T ), 
                   (unsigned char *)pArray + ( iIndex + iSize ) * sizeof ( T ),
                   ( iCount - ( iIndex + iSize ) ) * sizeof ( T ) );
       iCount -= iSize; }
 
-  void RemoveAll() { iCount = 0; Resize(0); };
+  void erase() { iCount = 0; Resize(0); };
 
-  void Detach ( T *&outArray, int &count ) { outArray = pArray; count = iCount; pCapacityReference = pArray = NULL; iCount = 0; iCapacity = 0; };  // detach  array for external use
-  void Attach ( T *inArray, int count ) { RemoveAll(); pCapacityReference = pArray = inArray; iCount = iCapacity = count; };  // attach array from existing memory place
+  void detach ( T *&outArray, int &count ) { outArray = pArray; count = iCount; pCapacityReference = pArray = NULL; iCount = 0; iCapacity = 0; };  // detach  array for external use
+  void attach ( T *inArray, int count ) { erase(); pCapacityReference = pArray = inArray; iCount = iCapacity = count; };  // attach array from existing memory place
 
 protected:
 
@@ -121,49 +122,58 @@ protected:
 
 };
 
-typedef XFYITKArray<tag_t>  XFYITKTagArray;
-typedef XFYITKArray<int>    XFYITKIntArray;
-typedef XFYITKArray<logical>    XFYITKLogicalArray;
+typedef ITKArray<tag_t>  ITKTagArray;
+typedef ITKArray<int>    ITKIntArray;
+typedef ITKArray<logical>    ITKLogicalArray;
 
 #ifdef GRM_H
-typedef XFYITKArray<GRM_relation_t> XFYITKRelationArray;
+typedef ITKArray<GRM_relation_t> ITKRelationArray;
 #endif
 
 #ifdef ITEM_H
-typedef XFYITKArray<ITEM_attached_object_t> XFYITKITEMAttachedArray;
+typedef ITKArray<ITEM_attached_object_t> ITKITEMAttachedArray;
 #endif
 
 #ifdef WORKSPACEOBJECT_H
-typedef XFYITKArray<WSO_status_t> XFYITKWSOStatusArray;
+typedef ITKArray<WSO_status_t> ITKWSOStatusArray;
 #endif
 
 #ifdef AE_H
-typedef XFYITKArray<AE_reference_type_t> XFYITKAEReferenceTypeArray;
+typedef ITKArray<AE_reference_type_t> ITKAEReferenceTypeArray;
 #endif
 
 /* borrow the old function until a MEM_length is not available */
 extern "C" int SM_length( const void * );
 
-class XFYITKStringArray : public XFYITKArray<char *>
+class ITKStringArray : public ITKArray<char *>
 {
 public:
-	~XFYITKStringArray() { if (pArray) { freeElements ( 0, iCount ); MEM_free(pArray); pArray = NULL; } };
+	operator const char**() const { return (const char**)pArray; };
+	operator char**() const { return pArray; };
+	
+	~ITKStringArray() { if (pArray) { freeElements ( 0, iCount ); MEM_free(pArray); pArray = NULL; } };
 
-	void RemoveAt( const int iIndex, const int iSize = 1 )
+	void erase( const int iIndex, const int iSize = 1 )
 	{
 	  freeElements ( iIndex, iSize );
-	  XFYITKArray<char *>::RemoveAt ( iIndex, iSize );
+	  ITKArray<char *>::erase ( iIndex, iSize );
 	}
 
-	void RemoveAll()
+	void erase()
 	{
 	  freeElements ( 0, iCount );
-      XFYITKArray<char *>::RemoveAll();
+      ITKArray<char *>::erase();
         }
 
-  int Add( const char * const &newElement)
+  int insert( const char * const &newElement)
   { // add copy
-    return XFYITKArray<char *>::Add ( XFY_ITK_string_copy ( newElement ) );
+	  return ITKArray<char *>::push_back ( MEM_string_copy ( newElement ) );
+  }
+
+  int push_back ( const XFY::ITKString &newElement )
+  {
+	   // add copy
+	  return ITKArray<char *>::push_back ( MEM_string_copy ( newElement.c_str() ) );
   }
 
 protected:
@@ -198,10 +208,10 @@ protected:
 	{ // set size to 0, removes all elemets
 	  freeElements ( 0, iCount );
 	}
-	XFYITKArray<char *>::Resize( nNewSize );
+	ITKArray<char *>::Resize( nNewSize );
   }
 };
 
+}
 
-
-#endif /* XFY_ARRAY_ITK_H */
+#endif /* XFY_ARRAY_ITK_H_ */

@@ -1,6 +1,8 @@
 #ifndef XFY_ITK_STRING_H
 #define XFY_ITK_STRING_H
 
+namespace XFY {
+
 // copy a string into a new (persistent) memory
 char * XFY_ITK_string_copy( const char* orig );
 // copy first n characters of string into a new (persistent) memory
@@ -13,29 +15,30 @@ void XFY_ITK_string_nappend( char* &orig, const char *append, unsigned int count
 char * XFY_ITK_string_xml_encode ( const char* orig );
 
 
-class XFYITKString
+class ITKString
 {
   char *m_pszValue;
 
 public:
-  XFYITKString() { m_pszValue = NULL; } // empty constructor
-  XFYITKString( const XFYITKString &cisString ) { m_pszValue = NULL; operator= ((const char *)cisString); }; // copy constructor
+  ITKString() { m_pszValue = NULL; } // empty constructor
+  ITKString( const ITKString &cisString ) { m_pszValue = NULL; operator= ((const char *)cisString); }; // copy constructor
   //XFYITKString( const char *String ) { m_pszValue = SM_string_copy_persistent ( String ); }  // string constructor
   // Deactivated for update TCEng2005
-  XFYITKString( const char *String ) { m_pszValue = ( String != NULL ? XFY_ITK_string_copy ( String ) : NULL ); }  // string constructor
-  XFYITKString( const char *String, const int iLen )  // Substring constructor
+  ITKString( const char *String ) { m_pszValue = ( String != NULL ? XFY_ITK_string_copy ( String ) : NULL ); }  // string constructor
+  ITKString( const char *String, const int iLen )  // Substring constructor
   {
 	m_pszValue = ( iLen >= 0 ) ? XFY_ITK_string_ncopy ( String, iLen )
                                : XFY_ITK_string_copy ( String );
   }
   
-  ~XFYITKString() { if (m_pszValue) MEM_free(m_pszValue); }; // destructor with memory free
+  ~ITKString() { if (m_pszValue) MEM_free(m_pszValue); }; // destructor with memory free
 
   char** operator &() { return &m_pszValue; };
   operator const char*() const { return m_pszValue; };
+  const char* c_str() const { return m_pszValue; };
   char operator [](const int iIndex) { return m_pszValue[iIndex]; };
 
-  const XFYITKString& operator = (const char *String )
+  const ITKString& operator = (const char *String )
   {
     if ( m_pszValue != NULL ) MEM_free ( m_pszValue );
 	m_pszValue = ( String != NULL ? XFY_ITK_string_copy ( String ) : NULL );
@@ -43,9 +46,9 @@ public:
     return *this;
   };
 
-  const XFYITKString& operator = (const XFYITKString& String) { return operator= ( (const char *)String ); };
+  const ITKString& operator = (const ITKString& String) { return operator= ( (const char *)String ); };
 
-  const XFYITKString& operator += (const char *String )
+  const ITKString& operator += (const char *String )
   {
     if ( String != NULL )
     {
@@ -74,10 +77,13 @@ public:
     m_pszValue = String;
   };
 
-  XFYITKString& encodeXML ();
+  ITKString& encodeXML ();
 
-  XFYITKString& getPreference ( const char *preference );
+  ITKString& getPreference ( const char *preference );
+
+  bool empty() { return m_pszValue == NULL || *m_pszValue == 0; }
 };
 
+}
 
 #endif /* XFY_ITK_STRING_H */
