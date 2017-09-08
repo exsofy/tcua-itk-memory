@@ -14,7 +14,7 @@ int XFY_POM_is_object_a ( tag_t tObject, const char *pszClassName, logical *isA,
 
   tag_t tClassID;
 
-  if ( ptClassID != NULL || *ptClassID == NULLTAG ) {
+  if ( ptClassID == NULL || *ptClassID == NULLTAG ) {
 	  POM_class_id_of_class ( pszClassName, &tClassID );
 	  if ( ptClassID != NULL ) *ptClassID = tClassID;
   }
