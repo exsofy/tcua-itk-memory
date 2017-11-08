@@ -1,21 +1,31 @@
 #ifndef XFY_ITK_STRING_H
 #define XFY_ITK_STRING_H
 
+#ifdef XFYUSELIB
+#ifdef XFYLIB
+#define XFY_API __declspec(dllexport)
+#else
+#define XFY_API __declspec(dllimport)
+#endif
+#else
+#define XFY_API
+#endif
+
 namespace XFY {
 
 // copy a string into a new (persistent) memory
-char * XFY_ITK_string_copy( const char* orig );
+XFY_API char * XFY_ITK_string_copy( const char* orig );
 // copy first n characters of string into a new (persistent) memory
-char * XFY_ITK_string_ncopy( const char* orig, unsigned int count );
+XFY_API char * XFY_ITK_string_ncopy( const char* orig, unsigned int count );
 // append second string to the first string with memory reallocation
-void XFY_ITK_string_append( char* &orig, const char *append );
+XFY_API void XFY_ITK_string_append( char* &orig, const char *append );
 // append n characters of the second string to the first string with memory reallocation
-void XFY_ITK_string_nappend( char* &orig, const char *append, unsigned int count  );
+XFY_API void XFY_ITK_string_nappend( char* &orig, const char *append, unsigned int count  );
 // encode original string for XML
-char * XFY_ITK_string_xml_encode ( const char* orig );
+XFY_API char * XFY_ITK_string_xml_encode ( const char* orig );
 
 
-class ITKString
+class XFY_API ITKString
 {
   char *m_pszValue;
 
@@ -85,5 +95,9 @@ public:
 };
 
 }
+
+#ifdef XFY_API
+#undef XFY_API
+#endif
 
 #endif /* XFY_ITK_STRING_H */
