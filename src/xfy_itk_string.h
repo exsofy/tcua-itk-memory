@@ -68,15 +68,15 @@ public:
   return *this;
   };
 
-  void append ( const char *String, const int Count = -1 )
+  void append ( const char *String, const ptrdiff_t Count = -1 )
   {
     if ( String == NULL ) return;
     if ( Count < 0 )
     {
       operator+=(String); return;
     };
-	if ( m_pszValue == NULL ) m_pszValue = XFY_ITK_string_ncopy ( String, Count );
-    else                      XFY_ITK_string_nappend ( m_pszValue, String, Count );
+	if ( m_pszValue == NULL ) m_pszValue = XFY_ITK_string_ncopy ( String, (int)Count );
+    else                      XFY_ITK_string_nappend ( m_pszValue, String, (int)Count );
   };
 
   char *detach () { char *pszRet = m_pszValue; m_pszValue = NULL; return pszRet; };

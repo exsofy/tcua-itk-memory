@@ -12,8 +12,7 @@ namespace XFY {
 char * XFY_ITK_string_copy( const char* orig )
 {
   if ( orig == NULL ) return NULL;
-  size_t iLen = ( strlen ( orig ) + 1 ) * sizeof ( char );
-  return (char*)memcpy ( MEM_alloc ( (int)iLen ), orig, iLen );
+  return MEM_string_copy( orig );
 }
 
 char * XFY_ITK_string_ncopy( const char* orig, unsigned int count )
