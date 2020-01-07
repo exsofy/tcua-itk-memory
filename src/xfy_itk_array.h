@@ -2,6 +2,9 @@
 #define XFY_ITK_ARRAY_H_
 
 #include <string.h>
+
+#include <common/tc_ver_info.h>
+
 #include "xfy_itk_string.h"
 
 namespace XFY {
@@ -134,8 +137,10 @@ typedef ITKArray<GRM_relation_t> ITKRelationArray;
 typedef ITKArray<ITEM_attached_object_t> ITKITEMAttachedArray;
 #endif
 
+#if TC_MAJOR_VERSION < 12000
 #ifdef WORKSPACEOBJECT_H
 typedef ITKArray<WSO_status_t> ITKWSOStatusArray;
+#endif
 #endif
 
 #ifdef AE_H
