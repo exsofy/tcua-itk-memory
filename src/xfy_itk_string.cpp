@@ -9,53 +9,6 @@
 
 namespace XFY {
 
-char * XFY_ITK_string_copy( const char* orig )
-{
-  if ( orig == NULL ) return NULL;
-  return MEM_string_copy( orig );
-}
-
-char * XFY_ITK_string_ncopy( const char* orig, unsigned int count )
-{
-  if ( orig == NULL ) return NULL;
-  size_t iLen = strlen ( orig );
-  if ( iLen > count ) iLen = count;
-  char *pszResult = (char*)memcpy ( MEM_alloc ( (int)( ( iLen + 1 ) * sizeof ( char ) ) ),
-                                    orig,
-                                    iLen  * sizeof ( char ) );
-  pszResult[iLen] = 0; // terminate string
-  return pszResult;
-}
-
-void XFY_ITK_string_append( char* &orig, const char *append )
-{
-  if ( ( append == NULL ) || ( *append == 0 ) )
-  { // nothing to do
-    return;
-  }
-
-  size_t iLen = (orig == NULL ) ? 0 : strlen ( orig );
-  size_t iAppend = strlen ( append ) + 1; // includes terminator 0
-  orig = (char *)MEM_realloc ( orig, (int)(iLen + iAppend) ); // lengt together + 0
-  memcpy ( orig + iLen, append, iAppend * sizeof ( char )  ); // copy append + 0
-}
-
-void XFY_ITK_string_nappend( char* &orig, const char *append, unsigned int count  )
-{
-  if ( ( append == NULL ) || ( *append == 0 ) || ( count <= 0 ) )
-  { // nothing to do
-    return;
-  }
-
-  size_t iLen = strlen ( orig );
-  size_t iAppend = strlen ( append );
-  if ( iAppend > count ) iAppend = count;
-  orig = (char *)MEM_realloc ( orig, (int)(iLen + iAppend + 1) ); // lengt together + 0
-  memcpy ( orig + iLen, append, iAppend * sizeof (char) ); // copy append
-  orig[iLen + iAppend] = 0; // terminate string
-}
-
-
 ITKString& ITKString::getPreference ( const char *preference )
 {
   XFY_TFCE_NAME( ITKString::getPreference );
@@ -106,7 +59,7 @@ char * XFY_ITK_string_xml_encode ( const char* orig )
 
   if ( newLen == ( pszRun - orig ) )
   {
-    pszResult = XFY_ITK_string_copy ( orig );
+    pszResult = MEM_string_copy ( orig );
   }
   else
   {
