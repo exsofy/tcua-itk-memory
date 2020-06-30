@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include <common/tc_ver_info.h>
+#include <tc/tc_startup.h>
 
 #include "xfy_itk_string.h"
 

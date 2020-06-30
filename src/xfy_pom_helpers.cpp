@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stddef.h>
 
-#include <tc/tc.h>
+//#include <tc/tc.h>
 #include <tccore/tctype.h>
 
 #include "../trace/xfy_trace_itk.h"
