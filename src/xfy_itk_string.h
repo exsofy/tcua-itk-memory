@@ -1,16 +1,28 @@
 #ifndef XFY_ITK_STRING_H
 #define XFY_ITK_STRING_H
 
-#include <base_utils/mem.h>
+#include <base_utils/Mem.h>
 
 #ifdef XFYUSELIB
-#ifdef XFYLIB
-#define XFY_API __declspec(dllexport)
+	#ifdef XFYLIB
+		#if defined(__lint)
+			#define XFY_API  __export(Avf2foundation)
+		#elif defined(_WIN32)
+			#define XFY_API __declspec(dllexport)
+		#else
+			#define XFY_API
+		#endif
+	#else
+		#if defined(__lint)
+			#define XFY_API  __export(Avf2foundation)
+		#elif defined(_WIN32)
+			#define XFY_API __declspec(dllimport)
+		#else
+			#define XFY_API
+		#endif
+	#endif
 #else
-#define XFY_API __declspec(dllimport)
-#endif
-#else
-#define XFY_API
+	#define XFY_API
 #endif
 
 namespace XFY {

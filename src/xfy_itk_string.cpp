@@ -1,7 +1,7 @@
 #include <string.h>
 #include <memory.h>
 
-#include <base_utils/mem.h>
+#include <base_utils/Mem.h>
 #include <tc/preferences.h>
 
 #include "../trace/xfy_trace_itk.h"
