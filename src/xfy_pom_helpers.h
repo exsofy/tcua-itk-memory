@@ -27,6 +27,8 @@ XFY_API int XFY_POM_is_object_a ( tag_t tObject, const char *pszClassName, logic
 
 XFY_API int XFY_POM_is_object_a ( tag_t tObject, tag_t tClassID, logical *isA );
 
+XFY_API int XFY_AOM_dump_object(const char *name, tag_t tObject);
+
 XFY_API int XFY_POM_dump_object ( const char *name, tag_t tObject );
 
 XFY_API int XFY_dump_error_stack ( const char *file, int line );

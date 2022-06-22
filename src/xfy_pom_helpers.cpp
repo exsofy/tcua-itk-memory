@@ -2,6 +2,8 @@
 #include <stddef.h>
 
 //#include <tc/tc.h>
+#include <tccore/aom.h>
+#include <tccore/aom_prop.h>
 #include <tccore/tctype.h>
 
 #include "../trace/xfy_trace_itk.h"
@@ -35,6 +37,34 @@ int XFY_POM_is_object_a ( tag_t tObject, tag_t tClassID, logical *isA )
   XFY_TRET ( POM_is_descendant ( tClassID, tObjectClass, isA ) );
 }
 
+int XFY_AOM_dump_object(const char *name, tag_t tObject)
+{
+	XFY_TFCE_P1(tObject, I);
+
+	if (tObject == NULLTAG) {
+		printf("%s: %d\n", name, tObject);
+		XFY_TRET(ITK_ok);
+	}
+
+	int propCount;
+	char **propNames;
+	AOM_ask_prop_names(tObject, &propCount, &propNames);
+
+	for (int iProp = 0; iProp < propCount; iProp++) {
+		int numValues;
+		char **values;
+		AOM_ask_displayable_values(tObject, propNames[iProp], &numValues, &values);
+
+		printf("\t%s: %s\n", propNames[iProp], numValues > 0 ? values[0] : "");
+
+		MEM_free(values);
+		MEM_free(propNames[iProp]);
+	}
+
+	MEM_free(propNames);
+
+	XFY_TRET_OK;
+}
 
 int XFY_POM_dump_object ( const char *name, tag_t tObject )
 {
@@ -186,7 +216,7 @@ int XFY_POM_dump_object ( const char *name, tag_t tObject )
 		}
 	}
 
-	XFY_TRET ( ITK_ok );
+	XFY_TRET_OK;
 }
 
 int XFY_dump_error_stack ( const char *file, int line ) {

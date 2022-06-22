@@ -176,13 +176,19 @@ public:
 		ITKArray<char *>::resize( nNewSize, nGrowBy );
 	}
 
-  int insert(const char * const &newElement) {
+	int insert(const char * const &newElement) {
 		// add copy
 		if (isPacked) splitMemory();
 		return ITKArray<char *>::push_back(MEM_string_copy(newElement));
 	}
 
-  int push_back(const XFY::ITKString &newElement) {
+	int insert(const char * const &newElement, int n) {
+	  // add copy
+	  if (isPacked) splitMemory();
+	  return ITKArray<char *>::push_back(MEM_string_ncopy(newElement,n));
+	}
+
+	int push_back(const XFY::ITKString &newElement) {
 		// add copy
 		if (isPacked) splitMemory();
 		return ITKArray<char *>::push_back(MEM_string_copy(newElement.c_str()));
