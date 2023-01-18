@@ -10,7 +10,7 @@
 
 #include "xfy_pom_helpers.h"
 
-int XFY_POM_is_object_a ( tag_t tObject, const char *pszClassName, logical *isA, tag_t *ptClassID )
+int XFY::POM_is_object_a ( tag_t tObject, const char *pszClassName, logical *isA, tag_t *ptClassID )
 {
   XFY_TFCE_P4 ( tObject, I, pszClassName, I, isA, O, ptClassID, O );
 
@@ -24,10 +24,10 @@ int XFY_POM_is_object_a ( tag_t tObject, const char *pszClassName, logical *isA,
 	  tClassID = *ptClassID;
   }
 
-  XFY_TRET ( XFY_POM_is_object_a ( tObject, tClassID, isA ) );
+  XFY_TRET (XFY::POM_is_object_a ( tObject, tClassID, isA ) );
 }
 
-int XFY_POM_is_object_a ( tag_t tObject, tag_t tClassID, logical *isA )
+int XFY::POM_is_object_a ( tag_t tObject, tag_t tClassID, logical *isA )
 {
   XFY_TFCE_P3 ( tObject, I, tClassID, I, isA, O );
 
@@ -37,7 +37,7 @@ int XFY_POM_is_object_a ( tag_t tObject, tag_t tClassID, logical *isA )
   XFY_TRET ( POM_is_descendant ( tClassID, tObjectClass, isA ) );
 }
 
-int XFY_AOM_dump_object(const char *name, tag_t tObject)
+int XFY::AOM_dump_object(const char *name, tag_t tObject)
 {
 	XFY_TFCE_P1(tObject, I);
 
@@ -66,7 +66,7 @@ int XFY_AOM_dump_object(const char *name, tag_t tObject)
 	XFY_TRET_OK;
 }
 
-int XFY_POM_dump_object ( const char *name, tag_t tObject )
+int XFY::POM_dump_object ( const char *name, tag_t tObject )
 {
 	XFY_TFCE_P1 ( tObject, I );
 
@@ -219,7 +219,7 @@ int XFY_POM_dump_object ( const char *name, tag_t tObject )
 	XFY_TRET_OK;
 }
 
-int XFY_dump_error_stack ( const char *file, int line ) {
+int XFY::dump_error_stack ( const char *file, int line ) {
   
   int            n_ifails;      /**< (O) Number of errors in the error store */
   const int*     severities;    /**< (O) n_ifails #EMH_severity_error, #EMH_severity_warning, or #EMH_severity_information */

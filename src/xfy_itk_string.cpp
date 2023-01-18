@@ -7,7 +7,21 @@
 #include "../trace/xfy_trace_itk.h"
 #include "xfy_itk_string.h"
 
-namespace XFY {
+#ifdef XFYMODULE
+	#define XFYNAMESPACESTART namespace XFYns { namespace XFYMODULE {
+	#define XFYNAMESPACEEND }}
+	#ifndef XFY
+		#define XFYNAMESPACE XFYns::XFYMODULE
+	#endif
+#else
+	#define XFYNAMESPACESTART namespace XFYns {
+	#define XFYNAMESPACEEND }
+	#ifndef XFY
+		#define XFY XFYns
+	#endif
+#endif
+
+XFYNAMESPACESTART
 
 ITKString& ITKString::getPreference ( const char *preference )
 {
@@ -92,4 +106,4 @@ char * XFY_ITK_string_xml_encode ( const char* orig )
   return pszResult;
 }
 
-}
+XFYNAMESPACEEND

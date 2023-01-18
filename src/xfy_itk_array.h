@@ -8,7 +8,21 @@
 
 #include "xfy_itk_string.h"
 
-namespace XFY {
+#ifdef XFYMODULE
+#define XFYNAMESPACESTART namespace XFYns { namespace XFYMODULE {
+#define XFYNAMESPACEEND }}
+#ifndef XFY
+#define XFYNAMESPACE XFYns::XFYMODULE
+#endif
+#else
+#define XFYNAMESPACESTART namespace XFYns {
+#define XFYNAMESPACEEND }
+#ifndef XFY
+#define XFY XFYns
+#endif
+#endif
+
+XFYNAMESPACESTART
 
 template < class T > class ITKArray {
 protected:
@@ -253,6 +267,16 @@ protected:
 		pCapacityReference = pArray = pNewArray;
 	}
   };
-} /* Namespace XFY */
+
+XFYNAMESPACEEND
+
+
+#ifdef 	XFYNAMESPACESTART
+#undef 	XFYNAMESPACESTART
+#endif
+
+#ifdef 	XFYNAMESPACEEND
+#undef 	XFYNAMESPACEEND
+#endif
 
 #endif /* XFY_ARRAY_ITK_H_ */
